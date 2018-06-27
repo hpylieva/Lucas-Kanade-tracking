@@ -4,7 +4,7 @@ import cv2 as cv
 from matplotlib import pyplot as plt
 
 
-def plot_match_result(img, match_result, top_left, bottom_right, method_name):
+def plot_matching_result(img, match_result, top_left, bottom_right, method):
     """
     Plot results of template matching.
     Images are automatically scaled in plt.imshow() like:
@@ -13,16 +13,17 @@ def plot_match_result(img, match_result, top_left, bottom_right, method_name):
     :param match_result:
     :param top_left:
     :param bottom_right:
-    :param method_name:
+    :param method:
     :return:
     """
     cv.rectangle(img, top_left, bottom_right, 255, 2)
-    plt.subplot(121),plt.imshow(match_result,cmap = 'gray')
+    plt.subplot(211),plt.imshow(match_result,cmap = 'gray')
     plt.title('Matching Result'), plt.xticks([]), plt.yticks([])
-    plt.subplot(122),plt.imshow(img,cmap = 'gray')
+    plt.subplot(212),plt.imshow(img,cmap = 'gray')
     plt.title('Detected Point'), plt.xticks([]), plt.yticks([])
-    plt.suptitle(method_name)
+    plt.suptitle("Appearance similarity function: "+str(method))
     plt.show()
+
 
 def template_matching(image, template, method = 'SSD'):
     """
@@ -46,10 +47,9 @@ def template_matching(image, template, method = 'SSD'):
                 res[h, w] = np.sum(np.power(patch - template,2))
             elif method=='NCC':
                 res[h, w] = np.sum(np.multiply(patch, template))
-                # np.sum(np.multiply(image[w:(w+t_height), h:(h+t_width)], templ))
                 res[h, w] /= np.sqrt(np.sum(np.square(patch)) * np.sum(np.square(template)))
             elif method=='SAD':
-                res[h, w] = np.sum(np.absolute(patch- template))
+                res[h, w] = np.sum(np.absolute(patch - template))
     return res
 
 
@@ -59,9 +59,9 @@ if __name__ == "__main__":
     template = cv.imread('babyface.jpg', 0)
     template_copy = template.copy()
     h, w = template.shape
-    targetPoint = (162, 74)
+    # targetPoint = (162, 74)
 
-    run_opencv_methods = True
+    run_opencv_methods = False
     if run_opencv_methods:
         methods = [
             'cv.TM_SQDIFF',
@@ -71,17 +71,17 @@ if __name__ == "__main__":
         for meth in methods:
             img = img_copy.copy()
             method = eval(meth)
-            # apply template Matching
+            # apply template matching
             res = cv.matchTemplate(img, template, method)
-            min_val, max_val, min_loc, max_loc = cv.minMaxLoc(res)
+            _, _, min_loc, max_loc = cv.minMaxLoc(res)
             # if the method is TM_SQDIFF or TM_SQDIFF_NORMED, take minimum
             if method in [cv.TM_SQDIFF, cv.TM_SQDIFF_NORMED]:
                 top_left = min_loc
             else:
                 top_left = max_loc
-            print("Top left point of area where template match", top_left)
+            print("Top left point of area where template match: ", top_left)
             bottom_right = (top_left[0] + w, top_left[1] + h)
-            plot_match_result(img, res, top_left, bottom_right, meth)
+            plot_matching_result(img, res, top_left, bottom_right, meth)
 
     methods = [
         'SSD',
@@ -95,13 +95,12 @@ if __name__ == "__main__":
         res = template_matching(img, template, method)
         # res = (1 - (res - np.min(res))/(np.max(res) - np.min(res)))*255
         # res = np.array(res, dtype = "uint8")
-        min_val, max_val, min_loc, max_loc = cv.minMaxLoc(res)
         if method in ['SSD', 'SAD']:
             top_left = np.unravel_index(res.argmin(), res.shape)[::-1]
         else:
             top_left = np.unravel_index(res.argmax(), res.shape)[::-1]
-        print("Top left point of area where template match", top_left)
+        print("Top left point of area where template match: ", top_left)
         bottom_right = (top_left[0] + w, top_left[1] + h)
-        plot_match_result(img, res, top_left, bottom_right, str(method))
+        plot_matching_result(img, res, top_left, bottom_right, method)
 
 
