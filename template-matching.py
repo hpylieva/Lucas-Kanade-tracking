@@ -46,8 +46,12 @@ def template_matching(image, template, method = 'SSD'):
             if method=='SSD':
                 res[h, w] = np.sum(np.power(patch - template,2))
             elif method=='NCC':
-                res[h, w] = np.sum(np.multiply(patch, template))
-                res[h, w] /= np.sqrt(np.sum(np.square(patch)) * np.sum(np.square(template)))
+                res[h,w] = np.mean((patch - patch.mean())* (template - template.mean()))
+                std = patch.std() * template.std()
+                if std ==0:
+                    res[h, w] = 0
+                else:
+                    res[h, w] /= std
             elif method=='SAD':
                 res[h, w] = np.sum(np.absolute(patch - template))
     return res
