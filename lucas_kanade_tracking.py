@@ -46,10 +46,9 @@ def get_central_point(region_of_interest):
             region_of_interest[1] + window_size[1] // 2]
 
 
-def show_image_with_rect(image, region_of_interest):
-    window_size = region_of_interest[-2:]
-    top_left = tuple(region_of_interest[:2])
-    bottom_right = tuple([int(top_left[i] + window_size[i]) for i in range(2)])
+def show_image_with_rect(image, roi):
+    top_left = tuple(roi[:2])
+    bottom_right = tuple([int(roi[0] + roi[2]), int(roi[1] + roi[3])])
     cv2.rectangle(image, top_left, bottom_right, 255, 2)
     plt.imshow(image, cmap='gray')
     plt.draw()
