@@ -50,9 +50,9 @@ def show_image_with_rect(image, roi):
     top_left = tuple(roi[:2])
     bottom_right = tuple([int(roi[0] + roi[2]), int(roi[1] + roi[3])])
     cv2.rectangle(image, top_left, bottom_right, 255, 2)
-    plt.imshow(image, cmap='gray')
-    plt.draw()
-    plt.pause(0.001)
+    cv2.imshow("Lucas-Kanade tracking",image)
+    # to show sequence of images properly as a sequence
+    cv2.waitKey(20)
 
 
 def lucas_kanade_tracker(image_list, region_of_interest):
@@ -67,7 +67,7 @@ def lucas_kanade_tracker(image_list, region_of_interest):
     show_image_with_rect(image_start, region_of_interest)
     print(region_of_interest)
 
-    for idx, img in enumerate(image_list):
+    for img in image_list:
         next_image = cv2.imread(img, 0)
         img_copy = next_image.copy()
         params = np.zeros(6, dtype="float32")
