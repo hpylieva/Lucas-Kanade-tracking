@@ -30,12 +30,10 @@ def jacobian(x):
 
 
 def get_roi(target, window_size):
-    return np.array([
-        int(np.floor(target[0])) - window_size[0] // 2,
-        int(np.floor(target[1])) - window_size[1] // 2,
-        window_size[0],
-        window_size[1]
-    ])
+    return np.array([int(np.floor(target[0])) - window_size[0] // 2,
+                     int(np.floor(target[1])) - window_size[1] // 2,
+                     window_size[0],
+                     window_size[1]])
 
 
 def get_central_point(region_of_interest):
@@ -65,6 +63,7 @@ def lucas_kanade_tracker(image_list, region_of_interest):
     window_size = args.roi[-2:]
     target_point = np.float32(get_central_point(args.roi))
     target = cut_patch(image_start, region_of_interest)
+
     # show the first image with initial roi
     show_image_with_rect(image_start, region_of_interest)
     print(region_of_interest)
@@ -105,7 +104,6 @@ def lucas_kanade_tracker(image_list, region_of_interest):
             dp = np.dot(np.linalg.inv(hessian), cost_function.T)
 
             dp_norm = np.linalg.norm(dp)
-
             if dp_norm < eps:
                 break
             else:
@@ -113,8 +111,6 @@ def lucas_kanade_tracker(image_list, region_of_interest):
 
         # update target point, roi and target patch
         target_point = warp_affine(target_point, params)
-        # print("New target point: {}".format(target_point))
-
         region_of_interest = get_roi(target_point, window_size)
         target = cut_patch(next_image, region_of_interest)
 
@@ -125,7 +121,7 @@ def lucas_kanade_tracker(image_list, region_of_interest):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--roi', nargs='+', type=int, default=[310,102,39,50])
+    parser.add_argument('--roi', nargs='+', type=int, default=[310, 102, 39, 50])
     parser.add_argument('--dpath', type=str, default='Football/img/')
     args = parser.parse_args()
 
