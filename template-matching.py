@@ -1,6 +1,5 @@
-import sys
+import cv2
 import numpy as np
-import cv2 as cv
 from matplotlib import pyplot as plt
 
 
@@ -9,14 +8,8 @@ def plot_matching_result(img, match_result, top_left, bottom_right, method):
     Plot results of template matching.
     Images are automatically scaled in plt.imshow() like:
     img = (img - np.min(img))/(np.max(img) - np.min(img))
-    :param img:
-    :param match_result:
-    :param top_left:
-    :param bottom_right:
-    :param method:
-    :return:
     """
-    cv.rectangle(img, top_left, bottom_right, 255, 2)
+    cv2.rectangle(img, top_left, bottom_right, 255, 2)
     plt.subplot(211),plt.imshow(match_result,cmap = 'gray')
     plt.title('Matching Result'), plt.xticks([]), plt.yticks([])
     plt.subplot(212),plt.imshow(img,cmap = 'gray')
@@ -58,9 +51,9 @@ def template_matching(image, template, method = 'SSD'):
 
 
 if __name__ == "__main__":
-    img = cv.imread('baby.jpg', 0)
+    img = cv2.imread('TestTemplateMatching/baby.jpg', 0)
     img_copy = img.copy()
-    template = cv.imread('babyface.jpg', 0)
+    template = cv2.imread('TestTemplateMatching/babyface.jpg', 0)
     template_copy = template.copy()
     h, w = template.shape
     # targetPoint = (162, 74)
@@ -68,18 +61,18 @@ if __name__ == "__main__":
     run_opencv_methods = False
     if run_opencv_methods:
         methods = [
-            'cv.TM_SQDIFF',
-            'cv.TM_CCORR_NORMED'
+            'cv2.TM_SQDIFF',
+            'cv2.TM_CCORR_NORMED'
         ]
 
         for meth in methods:
             img = img_copy.copy()
             method = eval(meth)
             # apply template matching
-            res = cv.matchTemplate(img, template, method)
-            _, _, min_loc, max_loc = cv.minMaxLoc(res)
+            res = cv2.matchTemplate(img, template, method)
+            _, _, min_loc, max_loc = cv2.minMaxLoc(res)
             # if the method is TM_SQDIFF or TM_SQDIFF_NORMED, take minimum
-            if method in [cv.TM_SQDIFF, cv.TM_SQDIFF_NORMED]:
+            if method in [cv2.TM_SQDIFF, cv2.TM_SQDIFF_NORMED]:
                 top_left = min_loc
             else:
                 top_left = max_loc
