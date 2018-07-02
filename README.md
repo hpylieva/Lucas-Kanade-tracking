@@ -14,7 +14,9 @@ The results of tracking can be copared with groundtruth_rect.txt whihc is provid
  The tracker should track the can, but in 6 iterations after the start finds a hand and tracks the hand.   
 
 2. DragonBaby  
-    Run with: python3 lucas_kanade_tracking.py --roi 160 83 56 65 --dpath 'DragonBaby/img/'  
-    Completely misses a baby when it starts moving fast.  
+    Run with: python3 lucas_kanade_tracking.py --roi 160 83 56 65 --dpath 'DragonBaby/img/'
+    Completely misses a baby when it starts moving fast.
 
-3. 
+3. Football  
+    Run with: python3 lucas_kanade_tracking.py --roi 310 102 39 50 --dpath 'Football/img/'  
+    On this dataset tracker performs the best because the speed of region of interest change is the lowest.

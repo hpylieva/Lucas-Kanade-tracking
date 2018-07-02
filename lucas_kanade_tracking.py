@@ -65,7 +65,8 @@ def lucas_kanade_tracker(image_list, region_of_interest):
     window_size = args.roi[-2:]
     target_point = np.float32(get_central_point(args.roi))
     target = cut_patch(image_start, region_of_interest)
-
+    # show the first image with initial roi
+    show_image_with_rect(image_start, region_of_interest)
     print(region_of_interest)
 
     for idx, img in enumerate(image_list):
@@ -115,17 +116,17 @@ def lucas_kanade_tracker(image_list, region_of_interest):
         # print("New target point: {}".format(target_point))
 
         region_of_interest = get_roi(target_point, window_size)
-        print(region_of_interest)
         target = cut_patch(next_image, region_of_interest)
 
         # show image with the just found rectangle
         show_image_with_rect(img_copy, region_of_interest)
+        print(region_of_interest)
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--roi', nargs='+', type=int, default=[298,160,48,80])
-    parser.add_argument('--dpath', type=str, default='Coke/img/')
+    parser.add_argument('--roi', nargs='+', type=int, default=[310,102,39,50])
+    parser.add_argument('--dpath', type=str, default='Football/img/')
     args = parser.parse_args()
 
     image_list = sorted(glob.glob(os.path.join(args.dpath, '*.jpg')))
