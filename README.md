@@ -37,7 +37,8 @@ To track the process in details change the last line in show_image_with_rect fun
 The results of tracking can be copared with groundtruth_rect.txt which is provided in archive downloaded by the link.  
 
 1. Coke  
-    Run with: python3 mean_shift.py --roi 298 160 48 80 --dpath 'Coke/img/'  
+    Run with: python3 mean_shift.py --roi 270 160 80 80 --dpath 'Coke/img/'  
+    (the results won't match with the groundtruth but with parameters from groundtruth_rect.txt trackers miss the can from the very beginning)
     All trackers cope with the task of can tracking.    
 
 2. DragonBaby  
