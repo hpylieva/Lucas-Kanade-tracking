@@ -20,7 +20,7 @@ def show_image_with_rect(image, roi, roi_meanshift_opencv, roi_camshift_opencv):
     cv2.rectangle(image, top_left_meanshift_opencv, bottom_right_meanshift_opencv, (0, 0, 255), 2) #blue
     cv2.rectangle(image, top_left_camshift_opencv, bottom_right_camshift_opencv, (0, 255, 0), 2) #green
     cv2.imshow("Meanshift tracking", image)
-    cv2.waitKey(0)
+    cv2.waitKey(20)
 
 
 def cut_patch(image, region_of_interest):
@@ -46,19 +46,22 @@ def get_central_point(region_of_interest):
 
 
 def mean_shift(hist, input_roi_box):
-    num_of_iterations = 10
-    max_distance = 0.5
-    centroid = get_central_point(input_roi_box)
+    num_of_iterations = 20
+    max_distance = 1
+    centroid = np.zeros(2)#get_central_point(input_roi_box)
     input_target_point = input_roi_box[:2]
     window_size = input_roi_box[2:4]
     for i in range(num_of_iterations):
         roi_box = cut_patch(hist, get_roi_box(input_target_point + centroid, window_size))
         new_centroid = np.array([np.mean(np.argwhere(roi_box > 0)[:, 1]), np.mean(np.argwhere(roi_box > 0)[:, 0])])
+        if np.isnan(new_centroid[0]):
+            print(roi_box)
         if np.linalg.norm(centroid - new_centroid) < max_distance:
             # print(i)
             break
         else:
             centroid = new_centroid
+            print(centroid)
     return get_roi_box(input_target_point + centroid, window_size)
 
 
@@ -73,8 +76,8 @@ def get_roi_historgram(img, track_window):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--roi', nargs='+', type=int, default=[160,83,100,100])
-    parser.add_argument('--dpath', type=str, default='DragonBaby/img/')
+    parser.add_argument('--roi', nargs='+', type=int, default=[270,160,80,80])
+    parser.add_argument('--dpath', type=str, default='Coke/img/')
     args = parser.parse_args()
 
     image_list = sorted(glob.glob(os.path.join(args.dpath, '*.jpg')))

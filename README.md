@@ -42,7 +42,19 @@ The results of tracking can be copared with groundtruth_rect.txt which is provid
     All trackers cope with the task of can tracking.    
 
 2. DragonBaby  
-    Run with: python3 mean_shift.py --roi 160 83 56 65 --dpath 'DragonBaby/img/'
+    Run with: python3 mean_shift.py --roi 160 83 100 100 --dpath 'DragonBaby/img/'
     As movements are fast CamShift window becomes large on the erty beginning and remains same throughut all sequence of images.
     Custom MeanShift goes out of window soon and the process interupts.
 
+**Note**: 
+Custom mean shift sometimes fails (centroid receives NaN coordinates; I wish I had time to investigate this). In this case program crashes with exception.
+  
+- for Coke dataset program doesn't crash when centroids are initialized as 
+centroid = np.zeros(2)
+
+But in this case meanshift converges much slower (up to 20 iterations) than it can.
+
+- for DragonBaby dataset program doesn't crash when centroids are initialized as 
+centroid = get_central_point(input_roi_box)
+
+So we take the current central point of region of interest and meanshift coverges in up to 3 iterations on each step.
