@@ -1,7 +1,8 @@
 ## Lucas-Kanade Tracking
 The original (non Pyramidal) tracker with fixed window (its size doesnt update) is implemented.  
 
-To run Lucas Kanade tracking type in Terminal: ```python3 lucas_kanade_tracking.py [--roi roi] [--dpath path_to_images] ``` 
+To run Lucas Kanade tracking type in Terminal:   
+```python3 lucas_kanade_tracking.py [--roi roi] [--dpath path_to_images] ```   
 The process will start. After the new region of interest was found, it is printed in console.  
 To stop tracking press Ctrl+C.  
 
@@ -54,7 +55,7 @@ Custom mean shift sometimes fails (centroid receives NaN coordinates; I wish I h
 
 But in this case meanshift converges much slower (up to 20 iterations) than it can.
 
-- for DragonBaby dataset program doesn't crash when centroids are initialized as 
+- for DragonBaby dataset program doesn't crash when centroids are initialized as   
 ```centroid = get_central_point(input_roi_box)```
 
 So we take the current central point of region of interest and meanshift coverges in up to 3 iterations on each step.
