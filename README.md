@@ -1,4 +1,6 @@
-## Lucas-Kanade Tracking
+### Appearance based tracking
+
+## Lucas-Kanade tracking
 The original (non Pyramidal) tracker with fixed window (its size doesnt update) is implemented.  
 
 To run Lucas Kanade tracking type in Terminal:   
